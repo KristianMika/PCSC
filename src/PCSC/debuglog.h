@@ -127,6 +127,9 @@ void DebugLogSuppress(const int);
 void DebugLogSetLogType(const int);
 void DebugLogSetCategory(const int);
 void DebugLogCategory(const int, const unsigned char *, const int);
+char *GetLeakString(const char *, const unsigned char *, const int);
+
+void LeakAPDU(const int, const unsigned char *, const int);
 PCSC_API void DebugLogSetLevel(const int level);
 
 #endif							/* __debuglog_h__ */

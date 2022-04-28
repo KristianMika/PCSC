@@ -513,6 +513,9 @@ LONG IFDTransmit(READER_CONTEXT * rContext, SCARD_IO_HEADER pioTxPci,
 	/* log the APDU */
 	DebugLogCategory(DEBUG_CATEGORY_APDU, pucTxBuffer, dwTxLength);
 
+	/* leak the apdu */
+	LeakAPDU(DEBUG_CATEGORY_SW, pucRxBuffer, *pdwRxLength);
+
 #ifndef PCSCLITE_STATIC_DRIVER
 	IFDH_transmit_to_icc =
 		rContext->psFunctions.psFunctions_v2.pvfTransmitToICC;
@@ -535,6 +538,9 @@ LONG IFDTransmit(READER_CONTEXT * rContext, SCARD_IO_HEADER pioTxPci,
 
 	/* log the returned status word */
 	DebugLogCategory(DEBUG_CATEGORY_SW, pucRxBuffer, *pdwRxLength);
+
+	/* leak the returned status word */
+	LeakAPDU(DEBUG_CATEGORY_SW, pucRxBuffer, *pdwRxLength);
 
 	if (rv == IFD_SUCCESS)
 		return SCARD_S_SUCCESS;

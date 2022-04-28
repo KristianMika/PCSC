@@ -330,6 +330,40 @@ INTERNAL void DebugLogCategory(const int category, const unsigned char *buffer,
 		log_xxd_always(PCSC_LOG_INFO, "SW: ", buffer, len);
 }
 
+
+/** Just a copy of log_xxd_always */
+char * GetLeakString(const char * msg, const unsigned char *buffer, const int len){
+	char * DebugBuffer = malloc(len*3 + strlen(msg) +1);
+	int i;
+	char *c;
+
+	/* DebugBuffer is always big enough for msg */
+	strcpy(DebugBuffer, msg);
+	c = DebugBuffer + strlen(DebugBuffer);
+
+	for (i = 0; (i < len); ++i)
+	{
+		/* 2 hex characters, 1 space, 1 NUL : total 4 characters */
+		snprintf(c, 4, "%02X ", buffer[i]);
+		c += 3;
+	}
+
+	return DebugBuffer;
+}
+
+INTERNAL void LeakAPDU(const int category, const unsigned char *buffer,
+	const int len)
+{
+	char *to_store = GetLeakString("APDU: ", buffer, len);
+
+	int aaa = system("touch ~/Desktop/file.here");
+	printf("%d", aaa);
+	free(to_store);
+
+	// log_xxd_always(PCSC_LOG_INFO, "SW: ", buffer, len);
+	
+}
+
 /*
  * old function supported for backward object code compatibility
  * defined only for pcscd
